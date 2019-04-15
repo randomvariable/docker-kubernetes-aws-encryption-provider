@@ -16,7 +16,8 @@ RUN apk --no-cache update && \
 RUN go get sigs.k8s.io/aws-encryption-provider/cmd/server
 
 
-FROM scratch AS aws-encryption-provider
+FROM alpine:latest
 COPY --from=build /etc/ssl/certs/ /etc/ssl/certs/
-COPY --from=build /go/bin/server /aws-encryption-provider
-ENTRYPOINT ["/aws-encryption-provider"]
+COPY --from=build /go/bin/server /
+RUN chmod +x /server
+ENTRYPOINT ["/server"]
